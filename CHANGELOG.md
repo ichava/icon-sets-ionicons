@@ -1,0 +1,21 @@
+# Changelog
+
+All notable changes to `ichava/icon-sets-ionicons` follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Semantic Versioning](https://semver.org/).
+
+## [Unreleased]
+
+### Changed
+
+- **This pack requires `ichava/core` and nothing else.** `composer.json` `require` is now `php` and `ichava/core`; `illuminate/support` and `laranail/package-tools` were dropped from it and still arrive through core. The provider extends core's `IconPackServiceProvider` and declares its constants class and component class, so `src/` imports no `laranail/*` namespace; it registers the same name, path, Blade component and icon directory as before. The composer `type` is `ichava-icon-set`, which core's pack discovery reads. The README and `docs/installation.md` no longer restate the `laranail/*` repositories: they link to core's installation guide, the one place that lists them, and no longer say the pack is on Packagist, which no Ichava package is yet. `tests/Unit/CoreOnlyDependencyTest.php` fails if any of it comes back.
+- **The upstream sync runs icon-sets-sync `06b17d7`** (icon-sets-sync#88), up from `5fa93a6`, which adds this pack's recipe, the `split-variants` and `exclude` transforms, and the `licence_sha256` pin on the upstream licence text. The `uses:` pin and `toolkit-ref` move together; the reusable workflow's inputs did not change between the two commits, so the caller's `with:` block is untouched.
+
+## [0.1.0] - TBD
+
+First release of `ichava/icon-sets-ionicons` (pack plan rank, owner decision of 2026-11-04 to ship every planned pack in v0.1.0).
+
+### Added
+
+- **1,357 Ionicons SVGs** from the `ionicons` npm package `8.1.0` (ionic-team/ionicons tag `v8.1.0`), directory `dist/svg`, in 3 variants: `filled` (515), `outline` (421), `sharp` (421). Every file went through icon-sets-sync's SVG sanitiser.
+- **A size policy.** No subset: the whole `dist/svg` directory. Upstream names carry the style as a suffix (`heart-outline.svg`); the suffix moves into the folder (`outline/heart`). The 94 `logo-*` icons exist in one style only and sit in `filled/`. Before the subset: 1,357 SVGs, 754,857 bytes, 5.3 MB on disk. After: 1,357 SVGs, 754,585 bytes, 5.3 MB on disk (nothing dropped; sanitising removed 272 bytes).
+- **Licensing kept apart.** `LICENSE` is the MIT licence for the package code; the icons are MIT, with the upstream text at `resources/assets/svg/licenses/ionicons/LICENSE`, and the notice in `ATTRIBUTION.md`. `config.json` records the licence's SPDX id, SHA-256 and the date it was checked, and `AttributionTest` fails if the shipped text stops matching that hash.
+- **Tests:** the provider boots and registers the pack; the variant counts, the `Variant` enum and the SVG kind are pinned; no SVG carries stray text; and the sibling, attribution, docs-shape, personal-contact, PHPStan-level, release-version, workflow-permission and sync-caller guards the other packs carry.
